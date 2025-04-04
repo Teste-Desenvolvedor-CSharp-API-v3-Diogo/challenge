@@ -1,6 +1,14 @@
 using MediatR;
+using Questao5.Application.Commands.CreateTransaction;
+using Questao5.Application.Queries.GetAccountBalance;
+using Questao5.Domain.Interfaces.Repositories;
+using Questao5.Infrastructure.Repositories.Implementations;
+using Questao5.Infrastructure.Repositories;
 using Questao5.Infrastructure.Sqlite;
 using System.Reflection;
+using Questao5.Infrastructure.Persistence;
+using Questao5.Application.Validators;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,11 +21,27 @@ builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddSingleton(new DatabaseConfig { Name = builder.Configuration.GetValue<string>("DatabaseName", "Data Source=database.sqlite") });
 builder.Services.AddSingleton<IDatabaseBootstrap, DatabaseBootstrap>();
 
+
+builder.Services.AddScoped<IValidator<CreateTransactionCommand>, CreateTransactionCommandValidator>();
+
+
+builder.Services.AddSingleton<ConnectionFactory>();
+builder.Services.AddScoped<CreateTransactionCommandHandler>();
+builder.Services.AddScoped<GetAccountBalanceQueryHandler>();
+
+builder.Services.AddScoped<IBankAccountRepository, BankAccountRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<IIdempotencyRepository, IdempotencyRepository>();
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+var bootstrap = app.Services.GetRequiredService<IDatabaseBootstrap>();
+bootstrap.Setup();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

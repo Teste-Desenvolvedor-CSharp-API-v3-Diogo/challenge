@@ -9,13 +9,5 @@ namespace Questao5.Application.Commands.CreateTransaction
         public int TransactionType { get; set; } // "C" or "D"
         public decimal Amount { get; set; }
         public string IdempotencyKey { get; set; } = string.Empty;
-
-        public CreateTransactionCommand(string accountNumber, int operationType, decimal amount, string idempotencyKey)
-        {
-            AccountNumber = accountNumber;
-            TransactionType = operationType;
-            Amount = amount;
-            IdempotencyKey = idempotencyKey;
-        }
     }
 }

@@ -11,6 +11,8 @@ public class BankAccount
     public string HolderName { get; }
     public bool IsActive { get; }
 
+    public BankAccount() { }
+
     public BankAccount(string id, string accountNumber, string holderName, bool isActive)
     {
         if (string.IsNullOrWhiteSpace(id))
