@@ -1,0 +1,37 @@
+# Compila��o
+bin/
+obj/
+out/
+
+# Diret�rios do Visual Studio
+.vs/
+.vscode/
+
+# Configura��o do usu�rio
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs e depura��o
+*.log
+*.tlog
+*.dmp
+
+# Depend�ncias geradas
+packages/
+.nuget/
+project.lock.json
+project.assets.json
+*.nuget.props
+*.nuget.targets
+
+# Arquivos tempor�rios
+*.tmp
+*.cache
+*.lck
+~$*
+
+# Configura��o local
+appsettings.Development.json
+appsettings.Local.json
