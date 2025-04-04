@@ -1,15 +1,16 @@
 ﻿using Questao5.Domain.Enumerators;
 using Questao5.Domain.Exceptions;
 
-namespace Questao5.Domain.Entities;
-
 public class Transaction
 {
-    public string Id { get; }
-    public string BankAccountId { get; }
-    public decimal Amount { get; }
-    public TransactionType Type { get; }
-    public DateTime Date { get; }
+    public string Id { get; private set; } = null!;
+    public string BankAccountId { get; private set; } = null!;
+    public decimal Amount { get; private set; }
+    public TransactionType Type { get; private set; }
+    public DateTime Date { get; private set; }
+
+
+    private Transaction() { }
 
     public Transaction(string id, string bankAccountId, decimal amount, TransactionType type, DateTime? date = null)
     {

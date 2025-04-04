@@ -2,6 +2,6 @@
 
 public enum TransactionType
 {
-    C,
-    D
+    Credit,
+    Debit
 }

@@ -1,8 +1,8 @@
 ﻿using Questao5.Domain.Entities;
 
-namespace Questao5.Infrastructure.Repositories;
+namespace Questao5.Domain.Interfaces.Repositories;
 
-public interface IAccountRepository
+public interface IBankAccountRepository
 {
     Task<BankAccount?> GetByIdAsync(string id);
     Task<BankAccount?> GetByNumberAsync(string accountNumber);

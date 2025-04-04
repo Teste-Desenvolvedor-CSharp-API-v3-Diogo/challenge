@@ -1,15 +1,16 @@
 ﻿using Dapper;
 using Questao5.Domain.Entities;
+using Questao5.Domain.Interfaces.Repositories;
 using Questao5.Infrastructure.Persistence;
 using System.Threading.Tasks;
 
 namespace Questao5.Infrastructure.Repositories.Implementations;
 
-public class AccountRepository : IAccountRepository
+public class BankAccountRepository : IBankAccountRepository
 {
     private readonly ConnectionFactory _connectionFactory;
 
-    public AccountRepository(ConnectionFactory connectionFactory)
+    public BankAccountRepository(ConnectionFactory connectionFactory)
     {
         _connectionFactory = connectionFactory;
     }

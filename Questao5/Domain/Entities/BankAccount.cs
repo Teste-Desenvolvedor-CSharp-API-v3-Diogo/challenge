@@ -1,4 +1,5 @@
-﻿using Questao5.Domain.Enumerators;
+﻿using Microsoft.OpenApi.Models;
+using Questao5.Domain.Enumerators;
 using Questao5.Domain.Exceptions;
 
 namespace Questao5.Domain.Entities;
@@ -27,7 +28,25 @@ public class BankAccount
         IsActive = isActive;
     }
 
-    public void EnsureIsActive()
+    public Transaction CreateTransaction(TransactionType transactionType
+        , decimal amount)
+    {
+        if (!IsActive)
+            throw new InvalidOperationException("Cannot create transaction for an inactive account.");
+
+        if (amount <= 0)
+            throw new ArgumentException("Transaction amount must be greater than zero.");
+
+        return new Transaction(
+        Guid.NewGuid().ToString(),
+        this.Id,
+        amount,
+        transactionType,
+        DateTime.UtcNow
+        );
+    }
+
+        public void EnsureIsActive()
     {
         if (!IsActive)
             throw new DomainException(ErrorType.INACTIVE_ACCOUNT, "Bank account is not active.");

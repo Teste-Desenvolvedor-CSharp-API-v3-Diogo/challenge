@@ -1,7 +1,4 @@
-﻿using Questao5.Domain.Entities;
-using Questao5.Domain.Enums;
-
-namespace Questao5.Infrastructure.Repositories;
+﻿namespace Questao5.Domain.Interfaces.Repositories;
 
 public interface ITransactionRepository
 {
