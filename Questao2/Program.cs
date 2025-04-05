@@ -1,30 +1,34 @@
-﻿using Newtonsoft.Json;
+using FootballGoalsConsoleApp.Services;
 
-public class Program
+var httpClient = new HttpClient();
+var service = new FootballService(httpClient);
+
+Console.WriteLine("=== Football Goals Calculator ===");
+
+while (true)
 {
-    public static void Main()
+    Console.Write("\nEnter team name (or type 'exit' to quit): ");
+    string team = Console.ReadLine()?.Trim();
+
+    if (string.IsNullOrEmpty(team) || team.ToLower() == "exit")
+        break;
+
+    Console.Write("Enter year: ");
+    if (!int.TryParse(Console.ReadLine(), out int year))
     {
-        string teamName = "Paris Saint-Germain";
-        int year = 2013;
-        int totalGoals = getTotalScoredGoals(teamName, year);
-
-        Console.WriteLine("Team "+ teamName +" scored "+ totalGoals.ToString() + " goals in "+ year);
-
-        teamName = "Chelsea";
-        year = 2014;
-        totalGoals = getTotalScoredGoals(teamName, year);
-
-        Console.WriteLine("Team " + teamName + " scored " + totalGoals.ToString() + " goals in " + year);
-
-        // Output expected:
-        // Team Paris Saint - Germain scored 109 goals in 2013
-        // Team Chelsea scored 92 goals in 2014
+        Console.WriteLine("Invalid year. Please try again.");
+        continue;
     }
 
-    public static int getTotalScoredGoals(string team, int year)
+    try
     {
-        
-        return 0;
+        int goals = await service.GetTotalGoalsAsync(team, year);
+        Console.WriteLine($"Team {team} scored {goals} goals in {year}");
     }
-
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred: {ex.Message}");
+    }
 }
+
+Console.WriteLine("\nGoodbye!");
