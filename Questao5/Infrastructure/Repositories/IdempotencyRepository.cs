@@ -23,16 +23,22 @@ namespace Questao5.Infrastructure.Repositories
             return count > 0;
         }
 
-        public async Task AddAsync(IdempotencyRecord record)
+        public async Task AddAsync(IdempotencyUnit unit)
         {
             using var connection = new SqliteConnection(_databaseConfig.Name);
             const string sql = "INSERT INTO idempotencia (chave_idempotencia, requisicao, resultado) VALUES (@Key, @Request, @Result)";
             await connection.ExecuteAsync(sql, new
             {
-                Key = record.Key,
-                Request = record.Request,
-                Result = record.Result
+                unit.Key,
+                unit.Request,
+                unit.Result
             });
+        }
+        public async Task<string> GetRequest(string key)
+        {
+            using var connection = new SqliteConnection(_databaseConfig.Name);
+            const string sql = "SELECT requisicao FROM idempotencia WHERE chave_idempotencia = @Key";
+            return await connection.QuerySingleOrDefaultAsync<string>(sql, new { Key = key }) ?? string.Empty;
         }
 
         public async Task<string> GetResult(string key)
