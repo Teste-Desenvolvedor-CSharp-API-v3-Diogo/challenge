@@ -19,10 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Questao4", "Questao4", "{D7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Questao5", "Questao5\Questao5.csproj", "{7B665AB7-6063-4EA5-A851-E41DBBE01242}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{26872A4A-F858-48C3-BD22-D6CD139EF084}"
-	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Questao5.Tests", "Questao5.Tests\Questao5.Tests.csproj", "{7C28780E-997B-4144-83DB-30E7A0B5967F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +39,10 @@ Global
 		{7B665AB7-6063-4EA5-A851-E41DBBE01242}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B665AB7-6063-4EA5-A851-E41DBBE01242}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B665AB7-6063-4EA5-A851-E41DBBE01242}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C28780E-997B-4144-83DB-30E7A0B5967F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C28780E-997B-4144-83DB-30E7A0B5967F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C28780E-997B-4144-83DB-30E7A0B5967F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C28780E-997B-4144-83DB-30E7A0B5967F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
