@@ -27,6 +27,6 @@ public class GetAccountBalanceQueryHandler : IRequestHandler<GetAccountBalanceQu
 
         var balance = await transactionRepository.GetBalanceAsync(account.Id);
 
-        return new GetAccountBalanceQueryResult(request.AccountNumber, balance);
+        return new GetAccountBalanceQueryResult(request.AccountNumber, account.HolderName, DateTime.Now, balance);
     }
 }

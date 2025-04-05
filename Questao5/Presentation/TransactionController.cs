@@ -19,10 +19,18 @@ public class TransactionController : ControllerBase
         this.mediator = mediator;
     }
 
+    /// <summary>
+    /// Cria uma nova transação bancária (crédito ou débito).
+    /// </summary>
+    /// <param name="command">Dados da transação</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>Identificador da transação criada</returns>
+    /// <response code="200">Transação criada com sucesso</response>
+    /// <response code="400">Erro ao processar a transação</response>
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [SwaggerOperation(Summary = "Cria uma nova transação bancária")]
-    [SwaggerRequestExample(typeof(CreateTransactionCommand), typeof(CreateTransactionCommandExample))]
-
     public async Task<IActionResult> CreateTransaction([FromBody] CreateTransactionCommand command, CancellationToken cancellationToken)
     {
         try
@@ -36,10 +44,32 @@ public class TransactionController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Retorna o saldo atual da conta corrente.
+    /// </summary>
+    /// <param name="accountNumber">Número da conta corrente</param>
+    /// <returns>Informações da conta e o saldo atual</returns>
+    /// <response code="200">Saldo consultado com sucesso</response>
+    /// <response code="400">Erro ao consultar saldo</response>
     [HttpGet("balance/{accountNumber}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerOperation(Summary = "Consulta o saldo da conta corrente")]
     public async Task<IActionResult> GetBalance(string accountNumber)
     {
-        var result = await mediator.Send(new GetAccountBalanceQuery(accountNumber));
-        return Ok(result);
+        try
+        {
+
+            var result = await mediator.Send(new GetAccountBalanceQuery(accountNumber));
+            return Ok(result);
+
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new
+            {
+                error = ex.Message
+            });
+        }
     }
 }

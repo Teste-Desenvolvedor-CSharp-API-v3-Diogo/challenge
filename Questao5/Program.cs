@@ -41,9 +41,17 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Questao5 API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Questao5",
+        Version = "v1",
+        Description = "API para transações bancárias"
+    });
 
-    // Adicionar suporte para exemplos nos endpoints
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+
     c.ExampleFilters();
 });
 
@@ -55,11 +63,10 @@ var app = builder.Build();
 var bootstrap = app.Services.GetRequiredService<IDatabaseBootstrap>();
 bootstrap.Setup();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Questao5 API v1"));
 }
 
 app.UseHttpsRedirection();
