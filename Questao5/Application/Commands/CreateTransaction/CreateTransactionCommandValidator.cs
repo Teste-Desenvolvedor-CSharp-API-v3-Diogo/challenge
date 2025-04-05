@@ -12,13 +12,16 @@ public class CreateTransactionCommandValidator : AbstractValidator<CreateTransac
             .NotEmpty().WithMessage("Account number is required.");
 
         RuleFor(x => x.IdempotencyKey)
-            .NotEmpty().WithMessage("Idempotency key is required.");
+            .NotEmpty()
+            .WithMessage("Idempotency key is required.");
 
         RuleFor(x => x.Amount)
-            .GreaterThan(0).WithMessage("Amount must be greater than zero.");
+            .GreaterThan(0)
+            .WithMessage("Amount must be greater than zero.");
 
         RuleFor(x => x.TransactionType)
-            .Must(type => type == (int)TransactionType.Credit || type == (int)TransactionType.Debit)
+            .Must(type => type == TransactionType.C.ToString()
+                       || type == TransactionType.D.ToString())
             .WithMessage("Operation type must be Credit or Debit.");
     }
 }

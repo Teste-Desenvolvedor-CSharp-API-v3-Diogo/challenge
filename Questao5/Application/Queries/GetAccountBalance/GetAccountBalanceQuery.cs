@@ -1,6 +1,8 @@
-﻿namespace Questao5.Application.Queries.GetAccountBalance;
+﻿using MediatR;
 
-public class GetAccountBalanceQuery
+namespace Questao5.Application.Queries.GetAccountBalance;
+
+public class GetAccountBalanceQuery : IRequest<GetAccountBalanceQueryResult>
 {
     public string AccountNumber { get; set; }
 

@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Questao5.Application.Commands.CreateTransaction;
 using Questao5.Application.Queries.GetAccountBalance;
+using Questao5.Presentation.SwaggerExamples;
+using Swashbuckle.AspNetCore.Annotations;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace Questao5.API.Controllers;
 
@@ -8,23 +12,22 @@ namespace Questao5.API.Controllers;
 [Route("api/[controller]")]
 public class TransactionController : ControllerBase
 {
-    private readonly CreateTransactionCommandHandler createTransactionHandler;
-    private readonly GetAccountBalanceQueryHandler getAccountBalanceHandler;
+    private readonly IMediator mediator;
 
-    public TransactionController(
-        CreateTransactionCommandHandler createTransactionHandler,
-        GetAccountBalanceQueryHandler getAccountBalanceHandler)
+    public TransactionController(IMediator mediator)
     {
-        this.createTransactionHandler = createTransactionHandler;
-        this.getAccountBalanceHandler = getAccountBalanceHandler;
+        this.mediator = mediator;
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateTransaction([FromBody] CreateTransactionCommand command)
+    [SwaggerOperation(Summary = "Cria uma nova transação bancária")]
+    [SwaggerRequestExample(typeof(CreateTransactionCommand), typeof(CreateTransactionCommandExample))]
+
+    public async Task<IActionResult> CreateTransaction([FromBody] CreateTransactionCommand command, CancellationToken cancellationToken)
     {
         try
         {
-            var result = await createTransactionHandler.Handle(command);
+            var result = await mediator.Send(command);
             return Ok(new { transactionId = result });
         }
         catch (Exception ex)
@@ -33,18 +36,10 @@ public class TransactionController : ControllerBase
         }
     }
 
-    [HttpGet("balance")]
-    public async Task<IActionResult> GetAccountBalance([FromQuery] string accountNumber)
+    [HttpGet("balance/{accountNumber}")]
+    public async Task<IActionResult> GetBalance(string accountNumber)
     {
-        try
-        {
-            var query = new GetAccountBalanceQuery(accountNumber);
-            var result = await getAccountBalanceHandler.Handle(query);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { error = ex.Message });
-        }
+        var result = await mediator.Send(new GetAccountBalanceQuery(accountNumber));
+        return Ok(result);
     }
 }

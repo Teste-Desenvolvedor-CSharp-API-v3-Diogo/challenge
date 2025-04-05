@@ -1,8 +1,9 @@
-﻿using Questao5.Domain.Interfaces.Repositories;
+﻿using MediatR;
+using Questao5.Domain.Interfaces.Repositories;
 
 namespace Questao5.Application.Queries.GetAccountBalance;
 
-public class GetAccountBalanceQueryHandler
+public class GetAccountBalanceQueryHandler : IRequestHandler<GetAccountBalanceQuery, GetAccountBalanceQueryResult>
 {
     private readonly IBankAccountRepository bankAccountRepository;
     private readonly ITransactionRepository transactionRepository;
@@ -14,10 +15,9 @@ public class GetAccountBalanceQueryHandler
         this.bankAccountRepository = bankAccountRepository;
         this.transactionRepository = transactionRepository;
     }
-
-    public async Task<GetAccountBalanceQueryResult> Handle(GetAccountBalanceQuery query)
+    public async Task<GetAccountBalanceQueryResult> Handle(GetAccountBalanceQuery request, CancellationToken cancellationToken)
     {
-        var account = await bankAccountRepository.GetByNumberAsync(query.AccountNumber);
+        var account = await bankAccountRepository.GetByNumberAsync(request.AccountNumber);
 
         if (account == null)
             throw new ArgumentException("Invalid account.");
@@ -27,6 +27,6 @@ public class GetAccountBalanceQueryHandler
 
         var balance = await transactionRepository.GetBalanceAsync(account.Id);
 
-        return new GetAccountBalanceQueryResult(query.AccountNumber, balance);
+        return new GetAccountBalanceQueryResult(request.AccountNumber, balance);
     }
 }

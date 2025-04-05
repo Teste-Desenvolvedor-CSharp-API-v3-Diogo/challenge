@@ -26,7 +26,7 @@ public class TransactionRepository : ITransactionRepository
             Id = transaction.Id,
             BankAccountId = transaction.BankAccountId,
             Date = transaction.Date.ToString("yyyy-MM-dd HH:mm:ss"),
-            Type = transaction.Type.ToString().Substring(0, 1),
+            Type = transaction.Type.ToString(),
             Amount = transaction.Amount
         });
     }

@@ -9,6 +9,8 @@ using System.Reflection;
 using Questao5.Infrastructure.Persistence;
 using Questao5.Application.Validators;
 using FluentValidation;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+builder.Services.AddMediatR(typeof(CreateTransactionCommandHandler).Assembly);
+
 
 // sqlite
 builder.Services.AddSingleton(new DatabaseConfig { Name = builder.Configuration.GetValue<string>("DatabaseName", "Data Source=database.sqlite") });
@@ -26,8 +30,6 @@ builder.Services.AddScoped<IValidator<CreateTransactionCommand>, CreateTransacti
 
 
 builder.Services.AddSingleton<ConnectionFactory>();
-builder.Services.AddScoped<CreateTransactionCommandHandler>();
-builder.Services.AddScoped<GetAccountBalanceQueryHandler>();
 
 builder.Services.AddScoped<IBankAccountRepository, BankAccountRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
@@ -36,7 +38,17 @@ builder.Services.AddScoped<IIdempotencyRepository, IdempotencyRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Questao5 API", Version = "v1" });
+
+    // Adicionar suporte para exemplos nos endpoints
+    c.ExampleFilters();
+});
+
+
+builder.Services.AddSwaggerExamplesFromAssemblies(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 
